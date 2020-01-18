@@ -107,10 +107,10 @@ resource "aws_codebuild_project" "gorilla-cb-project" {
     type                        = "LINUX_CONTAINER"
     image_pull_credentials_type = "CODEBUILD"
 
-    environment_variable {
-      name  = "Build-Environment"
-      value = "${var.company_name}-buildenvironment"
-    }
+    # environment_variable {
+    #   name  = "Build-Environment"
+    #   value = "${var.company_name}-buildenvironment"
+    # }
   }
 
   source {

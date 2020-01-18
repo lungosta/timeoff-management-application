@@ -19,6 +19,7 @@ phases:
   post_build:
     commands:
       - echo Install completed on 'date'
+      - ls -ltr .
 
 artifacts:
   files:
