@@ -4,9 +4,6 @@ phases:
   install:
     runtime-versions:
       nodejs: 10
-    commands: 
-      - echo Running NPM install
-      - npm install
 
   pre_build:
     commands:
@@ -14,12 +11,12 @@ phases:
   
   build:
     commands:
-      - echo Nothing to do in the build phase
+      - echo Building Node.js application
+      - npm install
   
   post_build:
     commands:
       - echo Install completed on 'date'
-      - ls -ltr .
 
 artifacts:
   files:
