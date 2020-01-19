@@ -119,7 +119,6 @@ resource "aws_codebuild_project" "gorilla-cb-project" {
   source {
     type            = "S3"
     location        = "${var.pipeline-s3bucket}"
-    git_clone_depth = 1
   }
 
   # source {
