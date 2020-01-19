@@ -117,10 +117,15 @@ resource "aws_codebuild_project" "gorilla-cb-project" {
   }
 
   source {
-    type            = "GITHUB"
-    location        = "${var.github_repo}"
-    git_clone_depth = 1
+    type            = "S3"
+    location        = "${var.pipeline-s3bucket}"
   }
+
+  # source {
+  #   type            = "GITHUB"
+  #   location        = "${var.github_repo}"
+  #   git_clone_depth = 1
+  # }
 
   tags = {
     Environment = "${var.environment_info}-${var.project}"

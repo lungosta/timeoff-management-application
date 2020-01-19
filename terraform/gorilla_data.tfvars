@@ -8,8 +8,8 @@ aws_region = "us-west-2"
 
 github_repo = "https://github.com/lungosta/timeoff-management-application.git"
 
-access_key = "AKIAZ6JH2S6O5MYGVZOL"
+access_key = ""
 
-secret_key = "NHWd0hNOWd/oidvwFap9L9dlEzj/z5c65xXD6lwv"
+secret_key = ""
 
 private_key = "gorilla-keypair"
