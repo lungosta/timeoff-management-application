@@ -18,18 +18,28 @@
 # - Cloudwatch alarm
 
 
-data "aws_ami" "gorilla-amazon-linux-2" {
- most_recent = true
- owners = ["amazon"]
+# data "aws_ami" "gorilla-amazon-linux-2" {
+#  most_recent = true
+#  owners = ["amazon"]
 
- filter {
-   name   = "owner-alias"
-   values = ["amazon"]
- }
- filter {
-   name   = "name"
-   values = ["amzn2-ami-hvm*"]
- }
+#  filter {
+#    name   = "owner-alias"
+#    values = ["amazon"]
+#  }
+#  filter {
+#    name   = "name"
+#    values = ["amzn2-ami-hvm*"]
+#  }
+# }
+
+data "aws_ami" "gorilla-amazon-linux-2" {
+  owners = ["self"]
+  filter {
+    name   = "tag:ami"
+    values = ["gorilla-ec2ami"]
+  }
+
+  most_recent = true
 }
 
 data "aws_availability_zones" "available" {}
@@ -377,15 +387,9 @@ resource "aws_launch_configuration" "gorilla-launchconfiguration" {
   key_name = "${var.private_key}"
   user_data = <<-EOF
               #!/bin/bash
-              sudo yum update -y
               sudo yum install wget -y
               sudo yum install git -y
               sudo yum install ruby -y
-              cd /home/ec2-user
-              sudo wget "https://aws-codedeploy-us-west-2.s3.us-west-2.amazonaws.com/latest/install"
-              sudo chmod +x ./install
-              sudo ./install auto
-              sudo service codedeploy-agent start
               cd /home/ec2-user
               curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.34.0/install.sh | bash
               . ~/.nvm/nvm.sh
@@ -401,6 +405,11 @@ resource "aws_launch_configuration" "gorilla-launchconfiguration" {
               pm2 start app.js --name "timeoff-management"
               sudo env PATH=$PATH:/home/ec2-user/.nvm/versions/node/v13.6.0/bin /home/ec2-user/.nvm/versions/node/v13.6.0/lib/node_modules/pm2/bin/pm2 startup systemd -u ec2-user --hp /home/ec2-user
               sudo service pm2-ec2-user start
+              cd /home/ec2-user
+              sudo wget "https://aws-codedeploy-us-west-2.s3.us-west-2.amazonaws.com/latest/install"
+              sudo chmod +x ./install
+              sudo ./install auto
+              sudo service codedeploy-agent start
               EOF
   lifecycle {
     create_before_destroy = true
