@@ -4,19 +4,20 @@ files:
   - source: /
     destination: /home/ec2-user/timeoff-management
 hooks:
+  ApplicationStop:
+    - location: commands/stop_instance.sh
+      timeout: 300
+      runas: root  
   BeforeInstall:
     - location: commands/dependencies.sh
       timeout: 300
       runas: root
-  AfterInstall:
-    - location: commands/permissions.sh
-      timeout: 300
-      runas: root
+  # AfterInstall:
+  #   - location: commands/permissions.sh
+  #     timeout: 300
+  #     runas: root
   ApplicationStart:
     - location: commands/start_instance.sh
       timeout: 300
       runas: root
-  ApplicationStop:
-    - location: commands/stop_instance.sh
-      timeout: 300
-      runas: root
+

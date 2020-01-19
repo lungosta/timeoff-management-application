@@ -11,7 +11,10 @@ resource "aws_s3_bucket" "gorilla-pipelilne-s3bucket" {
     Name        = "${var.company_name}-pipeline-s3"
     Billing     = "${var.billing_info}"
     Environment = "${var.environment_info}"
-    }  
+    }
+  versioning {
+    enabled = true
+  }    
 }
 
 resource "aws_iam_role" "gorilla-cb-role" {
@@ -103,14 +106,14 @@ resource "aws_codebuild_project" "gorilla-cb-project" {
 
   environment {
     compute_type                = "BUILD_GENERAL1_SMALL"
-    image                       = "aws/codebuild/amazonlinux2-x86_64-standard:2.0"
+    image                       = "aws/codebuild/standard:3.0"
     type                        = "LINUX_CONTAINER"
     image_pull_credentials_type = "CODEBUILD"
 
-    # environment_variable {
-    #   name  = "Build-Environment"
-    #   value = "${var.company_name}-buildenvironment"
-    # }
+    environment_variable {
+      name  = "Build-Environment"
+      value = "${var.company_name}-buildenvironment"
+    }
   }
 
   source {
@@ -316,16 +319,9 @@ resource "aws_codepipeline" "gorilla-codepipeline" {
 
       configuration = {
         S3Bucket = "${var.pipeline-s3bucket}"
-        S3ObjectKey = "timeoff-management.zip"
+        S3ObjectKey = "timeoff-management"
         PollForSourceChanges = true
       }
-      # configuration = {
-      #   Owner = "lungosta"
-      #   Repo = "timeoff-management-application"
-      #   BranchName = "master" 
-      #   PollForSourceChanges = "false"
-      #   # OAuthToken = ""
-      # }
     }
   }
 
