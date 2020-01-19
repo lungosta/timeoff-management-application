@@ -98,7 +98,7 @@ resource "aws_codebuild_project" "gorilla-cb-project" {
   service_role  = "${aws_iam_role.gorilla-cb-role.arn}"
 
   artifacts {
-    type = "S3"
+    type = "CODEPIPELINE"
     location = "${aws_s3_bucket.gorilla-pipelilne-s3bucket.id}"
     name = "timeoff-management"
     packaging = "ZIP"
@@ -117,34 +117,13 @@ resource "aws_codebuild_project" "gorilla-cb-project" {
   }
 
   source {
-    type            = "S3"
+    type            = "CODEPIPELINE"
     location        = "${var.pipeline-s3bucket}"
+    git_clone_depth = 1
   }
-
-  # source {
-  #   type            = "GITHUB"
-  #   location        = "${var.github_repo}"
-  #   git_clone_depth = 1
-  # }
 
   tags = {
     Environment = "${var.environment_info}-${var.project}"
-  }
-}
-
-resource "aws_codebuild_webhook" "gorilla-codebuild-webhook" {
-  project_name = "${aws_codebuild_project.gorilla-cb-project.name}"
-
-  filter_group {
-    filter {
-      type = "EVENT"
-      pattern = "PUSH"
-    }
-
-    filter {
-      type = "HEAD_REF"
-      pattern = "master"
-    }
   }
 }
 
